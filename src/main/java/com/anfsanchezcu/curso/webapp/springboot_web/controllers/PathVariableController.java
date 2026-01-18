@@ -1,6 +1,7 @@
 package com.anfsanchezcu.curso.webapp.springboot_web.controllers;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Value;
@@ -22,7 +23,17 @@ public class PathVariableController {
   private String userName;
   @Value("${config.message}") 
   private String message;
-  
+  //@Value("#{ '${config.listOfValues}'.split(',') }")
+  //private List<String> valueList;
+  @Value("#{${config.valuesMap}}")
+  private Map<String, Object> valuesMap;
+  @Value("#{${config.valuesMap}.product}")
+  private String product;
+  @Value("#{${config.valuesMap}.price}")
+  private Long price;
+
+
+
   @GetMapping("/baz/{message}")
   public ParamDto baz(@PathVariable(required = false) String message) {
 
@@ -50,10 +61,12 @@ public class PathVariableController {
   @GetMapping("/values")
   public Map<String, Object> values(){
     
-    Map<String, Object> map = new HashMap<>();
-    map.put("username",userName);
-    map.put("message",message);
-
-    return map; 
+    Map<String, Object> valuesData = new HashMap<>();
+    valuesData.put("username",userName);
+    valuesData.put("message",message);
+    valuesData.put("valuesMap", valuesMap);
+    valuesData.put("product", product);
+    valuesData.put("price", price);
+    return valuesData; 
   }
 }
