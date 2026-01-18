@@ -4,7 +4,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.env.Environment;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -21,10 +23,10 @@ public class PathVariableController {
 
   @Value("${config.username}")
   private String userName;
-  @Value("${config.message}") 
+  @Value("${config.message}")
   private String message;
-  //@Value("#{ '${config.listOfValues}'.split(',') }")
-  //private List<String> valueList;
+  // @Value("#{ '${config.listOfValues}'.split(',') }")
+  // private List<String> valueList;
   @Value("#{${config.valuesMap}}")
   private Map<String, Object> valuesMap;
   @Value("#{${config.valuesMap}.product}")
@@ -32,7 +34,8 @@ public class PathVariableController {
   @Value("#{${config.valuesMap}.price}")
   private Long price;
 
-
+  @Autowired
+  private Environment env;
 
   @GetMapping("/baz/{message}")
   public ParamDto baz(@PathVariable(required = false) String message) {
@@ -59,14 +62,19 @@ public class PathVariableController {
   }
 
   @GetMapping("/values")
-  public Map<String, Object> values(){
-    
+  public Map<String, Object> values() {
+
     Map<String, Object> valuesData = new HashMap<>();
-    valuesData.put("username",userName);
-    valuesData.put("message",message);
+    valuesData.put("username", userName);
+    valuesData.put("message", message);
     valuesData.put("valuesMap", valuesMap);
     valuesData.put("product", product);
     valuesData.put("price", price);
-    return valuesData; 
+
+    valuesData.put("messageEnv", env.getProperty("config.message"));
+    valuesData.put("codeEnv", env.getProperty("config.code"));
+    valuesData.put("codeIntEnv", Integer.valueOf(env.getProperty("config.code")));
+
+    return valuesData;
   }
 }
