@@ -19,7 +19,7 @@ public class RqParamsController {
   @GetMapping("/foo")
   public ParamDto foo(@RequestParam(required = false, defaultValue = "Hola default", name = "mensaje") String message) {
 
-    ParamDto paramDto = new ParamDto();
+    ParamDto paramDto = new ParamDto("");
     paramDto.setMessage(message);
 
     return paramDto;
@@ -43,5 +43,5 @@ public class RqParamsController {
     params.setMessage(request.getParameter("message"));
     return params;
   }
-  
+
 }

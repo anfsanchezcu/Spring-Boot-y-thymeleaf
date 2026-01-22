@@ -27,7 +27,7 @@ public class UserController {
     return "details";
   }
 
-  @GetMapping("list")
+  @GetMapping("/list")
   public String List(ModelMap model) {
     model.addAttribute("title", "lista de usuarios");
     return "list";
